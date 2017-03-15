@@ -1,0 +1,57 @@
+- name: INSTALL | JBoss group
+  group: name={{ jboss_eap_group }} state=present
+  tags:
+    - jboss_eap
+    - jboss_group
+
+- name: INSTALL | JBoss log group
+  group: name={{ jboss_eap_log_group }} state=present
+  tags:
+    - jboss_eap
+
+- name: INSTALL | JBoss user
+  user: name={{ jboss_eap_user }} groups={{ jboss_eap_group }},{{ jboss_eap_log_group }}  state=present
+  tags:
+    - jboss_eap
+
+- name: INSTALL | JBoss directories
+  file: path={{ item }} state=directory owner={{ jboss_eap_user }} group={{ jboss_eap_group }} mode={{ jboss_eap_dir_mode}}
+  with_items:
+    - "{{ jboss_eap_dirs }}"
+  tags:
+    - jboss_eap
+
+- name: INSTALL | JBoss instances
+  file: path={{jboss_eap_instance_dir}}/{{ item }} state=directory owner={{ jboss_eap_user }} group={{ jboss_eap_group}} mode={{ jboss_eap_dir_mode}}
+  with_items:
+    - "{{ jboss_eap_instance }}"
+  tags:
+    - jboss_eap
+
+- name: INSTALL | JBoss logs directories
+  file: path={{ jboss_eap_jboss_logs_dir }}/{{ item }} state=directory owner={{ jboss_eap_user }} group={{ jboss_eap_log_group}} mode={{ jboss_eap_log_dir_mode }}
+  with_items:
+    - "{{ jboss_eap_instance }}"
+  tags:
+    - jboss_eap
+
+- name: INSTALL | JBoss instance store directory create
+  file: path={{jboss_eap_instance_dir}}/{{ item }}/store state=directory owner={{ jboss_eap_user }} group={{ jboss_eap_group}} mode={{ jboss_eap_dir_mode}}
+  with_items:
+    - "{{ jboss_eap_instance }}"
+  tags:
+    - jboss_eap
+
+- name: INSTALL | Java install
+  yum: name={{ item }} state=present
+  with_items:
+    - "{{ jboss_eap_java_name }}"
+  tags:
+    - jboss_eap
+
+- name: INSTALL | JBoss install
+  yum: name={{ item }} state=present
+  with_items:
+    - "{{ jboss_eap_rpm_name }}"
+  tags:
+    - jboss_eap

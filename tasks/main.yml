@@ -1,0 +1,30 @@
+- name: Include variables
+  include_vars: "{{ item }}"
+  with_items:
+    - "RHEL-{{ ansible_distribution_major_version }}.yml"
+  tags:
+    - jboss_eap
+
+- name: Include installer tasks
+  include: jboss-eap-install.yml
+  tags:
+    - jboss_eap
+    - install
+
+- name: Include stores configuration tasks
+  include: jboss-eap-stores.yml
+  tags:
+    - jboss_eap
+    - jboss_service
+
+- name: Include JBoss configuration tasks
+  include: jboss-eap-configuration.yml
+  tags:
+    - jboss_eap
+    - jboss_configuration
+
+- name: Include service configuration tasks
+  include: jboss-eap-service.yml
+  tags:
+    - jboss_eap
+    - jboss_service

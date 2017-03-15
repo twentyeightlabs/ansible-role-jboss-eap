@@ -1,0 +1,41 @@
+- name: CONFIGURATION | Create instance configuration directories
+  file: path={{jboss_eap_instance_dir}}/{{ item }}/configuration state=directory owner={{ jboss_eap_user }} group={{ jboss_eap_group}} mode={{ jboss_eap_dir_mode}}
+  with_items:
+    - "{{ jboss_eap_instance }}"
+  tags:
+    - jboss_eap
+    - create_config_dir
+
+- name: CONFIGURATION | Create instance deployment direcories
+  file: path={{jboss_eap_instance_dir}}/{{ item }}/deployments state=directory owner={{ jboss_eap_user }} group={{ jboss_eap_group }} mode={{ jboss_eap_dir_mode}}
+  with_items:
+    - "{{ jboss_eap_instance }}"
+  tags:
+    - jboss_eap
+    - create_config_dir
+
+- name: CONFIGURATION | Create link to logs
+  file:
+    src: "{{ jboss_eap_jboss_logs_dir }}/{{ item }}"
+    dest: "{{ jboss_eap_instance_dir }}/{{ item }}/log"
+    owner: "{{ jboss_eap_user }}"
+    group: "{{ jboss_eap_group }}"
+    state: link
+#    force: yes
+  with_items:
+    - "{{ jboss_eap_instance }}"
+  tags:
+    - jboss_eap
+    - create_log_link
+
+- name: CONFIGURATION | Copy JBoss EAP configuration
+  copy:
+    src: configuration
+    dest: "{{jboss_eap_instance_dir}}/{{ item }}"
+    owner: "{{ jboss_eap_user }}"
+    group: "{{ jboss_eap_group }}"
+  with_items:
+    - "{{ jboss_eap_instance }}"
+  tags:
+    - jboss_eap
+    - copy_config

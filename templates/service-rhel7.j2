@@ -1,0 +1,14 @@
+[Unit]
+Description=JBoss EAP Systemctl script
+After=NetworkManager.service
+
+[Service]
+Type=forking
+UMask={{ jboss_eap_umask }}
+ExecStart={{ jboss_eap_jboss_home }}/bin/jboss6/bin/init.d/jboss-as-standalone.sh start
+ExecStop={{ jboss_eap_jboss_home }}/bin/jboss6/bin/init.d/jboss-as-standalone.sh stop
+ExecReload={{ jboss_eap_jboss_home }}/bin/jboss6/bin/init.d/jboss-as-standalone.sh restart
+PIDFile=/var/run/jboss/jboss-as-standalone.pid
+
+[Install]
+WantedBy=multi-user.target

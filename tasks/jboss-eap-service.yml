@@ -1,0 +1,31 @@
+- name: SERRVICE | Create service conf directory
+  file: path=/etc/jboss-as state=directory owner={{ jboss_eap_user }} group={{ jboss_eap_group }} mode={{ jboss_eap_dir_mode}}
+  tags:
+    - jboss_eap
+
+- name: SERRVICE | Create JBoss conf for service
+  template:
+    src: jboss-as-conf.j2
+    dest: "/etc/jboss-as/{{ jboss_eap_etc_conf_file }}"
+  tags:
+    - jboss_eap
+
+- name: SERRVICE | Copy service configuration
+  template:
+    src: service-rhel{{ ansible_distribution_major_version | int }}.j2
+    dest: "{{ jboss_eap_service_conf_file }}.service"
+  notify:
+    - reload systemd
+  tags:
+    - jboss_eap
+    - jboss_service
+
+- name: SERRVICE | Copy startup script
+  template:
+    src: jboss-as-standalone.j2
+    dest: "{{ jboss_eap_jboss_home}}/bin/jboss6/bin/init.d/jboss-as-standalone.sh"
+  notify:
+    - reload systemd
+  tags:
+    - jboss_eap
+    - jboss_script

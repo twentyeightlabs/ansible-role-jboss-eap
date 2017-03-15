@@ -1,0 +1,50 @@
+#JBoss users
+jboss_eap_user: jboss
+jboss_eap_group: jboss
+jboss_eap_log_group: jbosslg
+jboss_eap_configuration: standalone         #standalone, standalone-full ...
+jboss_eap_java_name: java
+jboss_eap_rpm_name: http://172.20.10.3:8000/ING_ISP_jboss6-6.4.0-01.x86_64.rpm-01.x86_64.rpm
+
+#JBoss directories permissions
+jboss_eap_dir_mode: '0750'
+jboss_eap_log_dir_mode: '2750'
+jboss_eap_umask: '0027'
+
+#JBoss directories
+jboss_eap_dirs:
+  - '/opt/jboss'
+  - '/var/log/jboss'
+  - '/opt/jboss/bin'
+  - '/opt/jboss/bin/jboss6'
+  - '/opt/jboss/instances'
+  - '/opt/jboss/appinout'
+jboss_eap_jboss_home: '/opt/jboss/'
+jboss_eap_jboss_logs_dir: '/var/log/jboss'
+
+#JBoss instance dirs
+jboss_eap_instance: instance01
+jboss_eap_instance_dir: "{{ jboss_eap_jboss_home }}/instances"
+
+#JBoss Service vars
+# jboss_eap_service_name:
+#   - "jboss-eap-{{ jboss_eap_instance }}"
+jboss_eap_etc_conf_file: jboss-as.conf
+
+#JBoss SSL
+jboss_eap_certificate_chain: "CN={{ ansible_hostname }}, OU=PL, OU=test, OU=test, OU=test, O=test"
+jboss_eap_keystore_name: jboss.keystore
+jboss_eap_keystore_password: changeit
+jboss_eap_truststore_name: jboss.truststore
+jboss_eap_truststore_password: changeit
+jboss_eap_ssl_protocol: TLSv1.2
+
+#Runtime settings
+jboss_eap_runtime_conf_file: "{{ jboss_eap_jboss_home }}/bin/{{ jboss_eap_configuration }}.conf"
+jboss_eap_public_address: "0.0.0.0"
+jboss_eap_management_address: "0.0.0.0"
+jboss_eap_intitial_memory: 512M
+jboss_eap_max_memory: 512M
+jboss_eap_permgen_size: 512M
+jboss_eap_java_opts:
+  - "-Xms{{ jboss_eap_initial_memory }} -Xmx{{ jboss_eap_max_memory }} -XX:MaxPermSize={{ jboss_eap_maxpermsize }} -Djava.net.preferIPv4Stack=true"
