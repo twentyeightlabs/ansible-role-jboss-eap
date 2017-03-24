@@ -1,19 +1,19 @@
 - name: KEYSTORE | Copy JBoss keystore
-  copy: src=files/jboss.keystore dest={{jboss_eap_instance_dir}}/{{ item }}/store owner={{ jboss_eap_user }} group={{ jboss_eap_group }} mode={{ jboss_eap_dir_mode }}
+  copy: src=files/jboss.keystore dest={{ jboss_eap_instance_dir }}/{{ item }}/store owner={{ jboss_eap_user }} group={{ jboss_eap_group }} mode={{ jboss_eap_dir_mode }}
   with_items:
     - "{{ jboss_eap_instance }}"
   tags:
     - jboss_eap
 
 - name: KEYSTORE | Copy JBoss truststore
-  copy: src=files/jboss.truststore dest={{jboss_eap_instance_dir}}/{{ item }}/store owner={{ jboss_eap_user }} group={{ jboss_eap_group }} mode={{ jboss_eap_dir_mode }}
+  copy: src=files/jboss.truststore dest={{ jboss_eap_instance_dir }}/{{ item }}/store owner={{ jboss_eap_user }} group={{ jboss_eap_group }} mode={{ jboss_eap_dir_mode }}
   with_items:
     - "{{ jboss_eap_instance }}"
   tags:
     - jboss_eap
 
 - name: KEYSTORE | Generate JBoss certificate 
-  shell: keytool -genkey -dname "{{ jboss_eap_certificate_chain }}" -alias {{ ansible_hostname }} -keyalg RSA -keysize 2048 -keystore {{jboss_eap_instance_dir}}/{{ item }}/store/jboss.keystore -storepass {{ jboss_eap_keystore_password }} -noprompt
+  shell: keytool -genkey -dname "{{ jboss_eap_certificate_chain }}" -alias {{ ansible_hostname }} -keyalg RSA -keysize 2048 -keystore {{ jboss_eap_instance_dir }}/{{ item }}/store/jboss.keystore -storepass {{ jboss_eap_keystore_password }} -noprompt
   with_items:
     - "{{ jboss_eap_instance }}"
   tags:
@@ -21,7 +21,7 @@
     - generate_cert
 
 - name: KEYSTORE | Generate JBoss certificate request - CSR
-  shell: keytool -certreq -alias {{ ansible_hostname }} -file {{jboss_eap_instance_dir}}/{{ item }}/store/{{ ansible_hostname }}.csr -keystore {{jboss_eap_instance_dir}}/{{ item }}/store/jboss.keystore -storepass {{ jboss_eap_keystore_password }} -noprompt
+  shell: keytool -certreq -alias {{ ansible_hostname }} -file {{ jboss_eap_instance_dir }}/{{ item }}/store/{{ ansible_hostname }}.csr -keystore {{ jboss_eap_instance_dir }}/{{ item }}/store/jboss.keystore -storepass {{ jboss_eap_keystore_password }} -noprompt
   with_items:
     - "{{ jboss_eap_instance }}"
   tags:
